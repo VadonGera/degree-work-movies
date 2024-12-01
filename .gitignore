@@ -164,3 +164,4 @@ cython_debug/
 .chat/
 # logs/
 /backend/src/staticfiles/
+/movies/src/staticfiles/
