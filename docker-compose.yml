@@ -1,0 +1,49 @@
+name: movies-container
+# Если MODE: django - "manage.py runserver 0.0.0.0:8000"
+# Если MODE: gunicorn - gunicorn на порту PORT (! ports: "PORT:PORT")
+services:
+  web:
+    build:
+      context: ./movies
+      dockerfile: Dockerfile
+    image: movies-image:2024.point
+    env_file:
+      - dev.env
+    environment:
+      DJANGO_ENV: dev  # Переменная среды для веб-приложения: 'dev' для 'dev.env', 'prod' для 'prod.env'
+      MODE: django  # MODE: gunicorn
+      PORT: 8000
+    volumes:
+      - ./movies/src:/app
+      - static_volume:/app/staticfiles  # Добавляем volume для общей статики
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+#    command: >
+#      sh -c "
+#      python manage.py runserver 0.0.0.0:8000 --settings=config.settings"
+    networks:
+      - horse
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - dev.env
+    environment:
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD}
+      POSTGRES_USER: ${PGSQL_USER}
+      POSTGRES_DB: ${PGSQL_DB}
+    volumes:
+      - my_data:/var/lib/postgresql/data
+    networks:
+      - horse
+
+volumes:
+  my_data:  # Объявляем том my_data для хранения данных PostgreSQL
+  static_volume:  # Определяем общий volume статики
+
+networks:
+  horse:
+    driver: bridge
