@@ -19,7 +19,7 @@ COPY requirements.txt /app/
 # RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 RUN pip install --upgrade pip && pip install --no-cache-dir -r /app/requirements.txt
 
-# EXPOSE 8000
+#EXPOSE 8000
 
 # gunicorn
 #CMD ["bash", "-c", "set -e && \
@@ -39,7 +39,7 @@ CMD ["bash", "-c", "set -e && \
     echo 'Running migrations...' && python manage.py migrate --noinput && \
     if [ -f superuser.py ]; then echo 'Creating superuser...' && python manage.py shell < superuser.py; fi && \
     echo 'Starting...' && \
-    if [ \"$MODE\" = 'gunicorn' ]; then gunicorn -c gunicorn.conf.py config.wsgi:application; else python manage.py runserver 0.0.0.0:8000; fi"]
+    if [ \"$MODE\" = 'gunicorn' ]; then gunicorn -c gunicorn.conf.py config.wsgi:application; else python manage.py runserver 0.0.0.0:\"$PORT\"; fi"]
 
 
-#CMD ["sh", "-c", "if [ \"$MODE\" = 'production' ]; then gunicorn -c gunicorn.conf.py config.wsgi:application; else python manage.py runserver 0.0.0.0:8000; fi"]
+#CMD ["sh", "-c", "if [ \"$MODE\" = 'gunicorn' ]; then gunicorn -c gunicorn.conf.py config.wsgi:application; else python manage.py runserver 0.0.0.0:8000; fi"]

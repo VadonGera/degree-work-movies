@@ -14,14 +14,16 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-# Определяем текущую среду
-current_env = os.getenv("DJANGO_ENV", "dev")  # По умолчанию 'development'
-# Определяем путь к нужному .env файлу
-env_file = f"{current_env}.env"
-# Загружаем переменные из файла
-load_dotenv(env_file)
 
-# load_dotenv("dev.env")
+load_dotenv()  # Загружаем базовые переменные из файла .env
+
+# Определяем текущую среду, по умолчанию 'development'
+current_env = str(os.getenv("DJANGO_ENV"))
+env_file = f".env.{current_env}"  # Определяем путь к нужному .env файлу
+load_dotenv(env_file)  # Дозагружаем переменные из файла
+
+print(f"env_file: {env_file}")
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
