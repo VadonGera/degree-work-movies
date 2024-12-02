@@ -18,11 +18,18 @@ import os
 load_dotenv()  # Загружаем базовые переменные из файла .env
 
 # Определяем текущую среду, по умолчанию 'development'
-current_env = str(os.getenv("DJANGO_ENV"))
+current_env = str(os.getenv("DJANGO_ENV", "development"))
 env_file = f".env.{current_env}"  # Определяем путь к нужному .env файлу
 load_dotenv(env_file)  # Дозагружаем переменные из файла
 
 print(f"env_file: {env_file}")
+
+
+# Определяем текущую среду и дозагружаем переменные из файла
+if str(os.getenv("DJANGO_ENV", "development")) == "development":
+    load_dotenv(".env.dev")
+else:
+    load_dotenv(".env.pro")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
