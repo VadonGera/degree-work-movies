@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Movie, Genre, Director, MediaType
+from .models import Movie, Genre, Director, MediaType, Rating, Review
 
 from django.contrib.auth.admin import UserAdmin
 
@@ -31,3 +31,15 @@ class GenreAdmin(admin.ModelAdmin):
 class DirectorAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ("user", "movie", "value")
+    list_filter = ("value",)
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ("user", "movie", "created_at", "updated_at")
+    list_filter = ("created_at", "updated_at")
