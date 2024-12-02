@@ -15,6 +15,7 @@ class Genre(models.Model):
     class Meta:
         verbose_name = "Жанр"
         verbose_name_plural = "Жанр"
+        ordering = ["name"]
 
 
 class Director(models.Model):
@@ -26,6 +27,31 @@ class Director(models.Model):
     class Meta:
         verbose_name = "Режиссер"
         verbose_name_plural = "Режиссеры"
+        ordering = ["name"]
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Страна")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Страна"
+        verbose_name_plural = "Страны"
+        ordering = ["name"]
+
+
+class Actor(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Актер")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Актер"
+        verbose_name_plural = "Актеры"
+        ordering = ["name"]
 
 
 class MediaType(models.Model):
@@ -37,6 +63,7 @@ class MediaType(models.Model):
     class Meta:
         verbose_name = "Тип медиа"
         verbose_name_plural = "Типы медиа"
+        ordering = ["name"]
 
 
 class Movie(models.Model):
@@ -44,11 +71,12 @@ class Movie(models.Model):
     description = models.TextField(verbose_name="Описание фильма")
     trailer = models.URLField(verbose_name="Ссылка на трейлер")
     year = models.IntegerField(verbose_name="Год выхода")
-    # rating = models.CharField(max_length=5, verbose_name="Рейтинг")
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, verbose_name="Жанр")
-    director = models.ForeignKey(
-        Director, on_delete=models.CASCADE, verbose_name="Режиссёр"
-    )
+
+    countries = models.ManyToManyField(Country, verbose_name="Страны", blank=True)
+    genres = models.ManyToManyField(Genre, verbose_name="Жанры", blank=True)
+    directors = models.ManyToManyField(Director, verbose_name="Режиссер", blank=True)
+    actors = models.ManyToManyField(Actor, verbose_name="Актеры", blank=True)
+
     image = models.ImageField(
         upload_to="movies/", verbose_name="Изображение", blank=True, null=True
     )
@@ -94,7 +122,7 @@ class Movie(models.Model):
 
 
 class Rating(models.Model):
-    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]  # Оценки от 1 до 5
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 11)]  # Оценки от 1 до 10
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ratings")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="ratings")
@@ -122,6 +150,12 @@ class Review(models.Model):
         unique_together = ("user", "movie")
         verbose_name = "рецензия"
         verbose_name_plural = "рецензии"
+        ordering = ["-created_at"]
 
     def __str__(self):
-        return f"Review by {self.user.username} on {self.movie.title}"
+        media_type = (
+            self.movie.media_type.name.lower()
+            if self.movie.media_type
+            else "unknown type"
+        )
+        return f"Рецензия '{self.user.username}' на {media_type} '{self.movie.title}'"

@@ -1,17 +1,23 @@
 from django.contrib import admin
-from .models import Movie, Genre, Director, MediaType, Rating, Review
+from .models import Movie, Genre, Director, MediaType, Rating, Review, Actor, Country
 
 from django.contrib.auth.admin import UserAdmin
 
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ("title", "year", "genre", "director", "media_type")
+    list_display = (
+        "title",
+        "year",
+        # "genre",
+        # "director",
+        "media_type",
+    )
     search_fields = (
         "title",
-        "director__name",
+        "directors__name",
     )  # Позволяет искать по названию фильма и имени режиссера
-    list_filter = ("genre", "year")
+    list_filter = ("genres", "year")
 
 
 @admin.register(MediaType)
@@ -29,6 +35,18 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Director)
 class DirectorAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+
+
+@admin.register(Actor)
+class ActorAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
 
