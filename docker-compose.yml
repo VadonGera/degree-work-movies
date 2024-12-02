@@ -10,12 +10,8 @@ services:
     volumes:
       - ./movies/src:/app
       - static_volume:/app/staticfiles  # Добавляем volume для общей статики
-#    command: >
-#      sh -c "
-#      python manage.py runserver 0.0.0.0:8000"
     ports:
       - ${PORT_BOX}:${PORT_BOX}
-      # - 127.0.0.1:8000:8000
     env_file:
       - .env
     environment:
@@ -25,7 +21,9 @@ services:
 
     # Дожидаемся запуска контейнера db
     depends_on:
-      - postgres
+      postgres:
+        # и проверки его состояния
+        condition: service_healthy
     networks:
       - horse
 
@@ -40,13 +38,17 @@ services:
       POSTGRES_PASSWORD: ${PGSQL_PASSWORD}
       POSTGRES_USER: ${PGSQL_USER}
       POSTGRES_DB: ${PGSQL_DB}
-#      POSTGRES_PASSWORD: ${PGSQL_PASSWORD}
-#      POSTGRES_USER: ${PGSQL_USER}
-#      POSTGRES_DB: ${PGSQL_DB}
-      # POSTGRES_HOST_AUTH_METHOD: trust
-#    healthcheck:
-#      # Запускаем внутри контейнера проверку его состояния
-#      test: pg_isready -h postgres -U user -d password
+    healthcheck:
+      # Запускаем внутри контейнера проверку его состояния
+      test: pg_isready -h postgres -U ${PGSQL_USER} -d ${PGSQL_DB}
+      # Интервал между проверками
+      interval: 2s
+      # Время на завершение проверки
+      timeout: 2s
+      # Количество неуспешных попыток проверки для "отказа"
+      retries: 3
+      # Ожидание перед началом проверок
+      start_period: 2s
     networks:
       - horse
 
