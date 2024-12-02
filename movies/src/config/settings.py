@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS += ["rest_framework", "movies"]
+INSTALLED_APPS += [
+    "rest_framework",
+    "movies",
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

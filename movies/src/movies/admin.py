@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Movie, Genre, Director, MediaType, Rating, Review, Actor, Country
-
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -9,8 +8,6 @@ class MovieAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "year",
-        # "genre",
-        # "director",
         "media_type",
     )
     search_fields = (
@@ -18,6 +15,7 @@ class MovieAdmin(admin.ModelAdmin):
         "directors__name",
     )  # Позволяет искать по названию фильма и имени режиссера
     list_filter = ("genres", "year")
+    autocomplete_fields = ["actors", "countries", "genres", "directors"]
 
 
 @admin.register(MediaType)
