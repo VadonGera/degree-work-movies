@@ -1,4 +1,5 @@
-from django.db.models import Avg
+from django.db.models import Avg, Max
+from django.db.models.functions import Round
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
@@ -18,7 +19,8 @@ class MovieListView(ListView):
         queryset = Movie.objects.all()
 
         # Аннотация для среднего рейтинга
-        queryset = queryset.annotate(average_rating=Avg("ratings__value"))
+        # queryset = queryset.annotate(average_rating=Avg("ratings__value"))
+        queryset = queryset.annotate(average_rating=Round(Avg("ratings__value"), 1))
 
         # Фильтры
         media = self.request.GET.get("media")

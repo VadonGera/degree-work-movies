@@ -122,16 +122,16 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
-    def average_rating(self):
-        """Вычисляет средний рейтинг фильма"""
-        ratings = self.ratings.all()
-        if not ratings.exists():
-            return None
-        avg = sum(rating.value for rating in ratings) / ratings.count()
-        # return round(avg, 1)
-        # return avg.quantize(Decimal("1.00"))
-        # return math.ceil(avg)
-        return int(avg)
+    # def average_rating(self):
+    #     """Вычисляет средний рейтинг фильма"""
+    #     ratings = self.ratings.all()
+    #     if not ratings.exists():
+    #         return None
+    #     avg = sum(rating.value for rating in ratings) / ratings.count()
+    #     # return round(avg, 1)
+    #     # return avg.quantize(Decimal("1.00"))
+    #     # return math.ceil(avg)
+    #     return avg
 
     def review_count(self):
         """Возвращает количество рецензий для фильма"""
