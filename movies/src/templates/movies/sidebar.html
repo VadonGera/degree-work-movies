@@ -1,4 +1,69 @@
 <aside class="bg-light p-3 rounded">
     <h5>Фильтры</h5>
-    <p>Здесь появятся фильтры.</p>
+    <form method="GET" action=".">
+        <!-- Фильтр по медиа -->
+        <div class="mb-3">
+            <label for="media" class="form-label">Медиа</label>
+            <select class="form-select" name="media" id="media">
+                <option value="">Все медиа</option>
+                {% for media in media_types %}
+                    <option value="{{ media.id }}" {% if request.GET.media|default:'' == media.id|stringformat:"s" %}selected{% endif %}>
+                        {{ media.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Фильтр по странам -->
+        <div class="mb-3">
+            <label for="country" class="form-label">Страна</label>
+            <select class="form-select" name="country" id="country">
+                <option value="">Все страны</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}" {% if request.GET.country|default:'' == country.id|stringformat:"s" %}selected{% endif %}>
+                        {{ country.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Фильтр по жанрам -->
+        <div class="mb-3">
+            <label for="genre" class="form-label">Жанр</label>
+            <select class="form-select" name="genre" id="genre">
+                <option value="">Все жанры</option>
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}" {% if request.GET.genre|default:'' == genre.id|stringformat:"s" %}selected{% endif %}>
+                        {{ genre.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Фильтр по годам -->
+        <div class="mb-3">
+            <label for="year" class="form-label">Год</label>
+            <select class="form-select" name="year" id="year">
+                <option value="">Все годы</option>
+                {% for year in years %}
+                    <option value="{{ year }}" {% if request.GET.year == year|stringformat:"s" %}selected{% endif %}>
+                        {{ year }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Сортировка -->
+        <div class="mb-3">
+            <label for="sort" class="form-label">Сортировка</label>
+            <select class="form-select" name="sort" id="sort">
+                <option value="title" {% if request.GET.sort == 'title' %}selected{% endif %}>По названию</option>
+                <option value="-average_rating" {% if request.GET.sort == '-average_rating' %}selected{% endif %}>По рейтингу</option>
+                <option value="-year" {% if request.GET.sort == '-year' %}selected{% endif %}>По дате выхода</option>
+            </select>
+        </div>
+
+        <!-- Кнопка отправки -->
+        <button type="submit" class="btn btn-dark">Применить</button>
+    </form>
 </aside>

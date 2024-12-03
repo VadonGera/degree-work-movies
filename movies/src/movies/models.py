@@ -2,6 +2,8 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth import get_user_model
+from decimal import *
+import math
 
 User = get_user_model()
 
@@ -125,7 +127,11 @@ class Movie(models.Model):
         ratings = self.ratings.all()
         if not ratings.exists():
             return None
-        return sum(rating.value for rating in ratings) / ratings.count()
+        avg = sum(rating.value for rating in ratings) / ratings.count()
+        # return round(avg, 1)
+        # return avg.quantize(Decimal("1.00"))
+        # return math.ceil(avg)
+        return int(avg)
 
     def review_count(self):
         """Возвращает количество рецензий для фильма"""
