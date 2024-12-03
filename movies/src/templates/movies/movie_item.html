@@ -1,0 +1,10 @@
+<div class="col-md-4 mb-4">
+    <div class="card">
+        <img src="{{ movie.get_image_url }}" class="card-img-top" alt="{{ movie.title }}">
+        <div class="card-body">
+            <h5 class="card-title">{{ movie.title }}</h5>
+            <p class="card-text">{{ movie.description|truncatechars:100 }}</p>
+            <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary">Подробнее</a>
+        </div>
+    </div>
+</div>

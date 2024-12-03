@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ movie.get_image_url }}" alt="{{ movie.title }}" class="img-fluid">
+        </div>
+        <div class="col-md-8">
+            <h2>{{ movie.title }}</h2>
+            <p>{{ movie.description }}</p>
+            <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
+            <p><strong>Жанры:</strong> {{ movie.genres.all|join:", " }}</p>
+            <p><strong>Режиссеры:</strong> {{ movie.directors.all|join:", " }}</p>
+            <p><strong>Страны:</strong> {{ movie.countries.all|join:", " }}</p>
+        </div>
+    </div>
+</div>

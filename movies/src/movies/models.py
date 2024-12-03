@@ -106,6 +106,17 @@ class Movie(models.Model):
                     {"external_image_url": "Введённый URL недействителен."}
                 )
 
+    def get_image_url(self):
+        """
+        Возвращает URL для изображения: сначала пытается взять из поля `image`,
+        затем из `external_image_url`. Если оба пустые — возвращает URL заглушки.
+        """
+        if self.image:
+            return self.image.url
+        elif self.external_image_url:
+            return self.external_image_url
+        return "/static/images/placeholder.png"  # Путь к изображению-заглушке
+
     def __str__(self):
         return self.title
 
