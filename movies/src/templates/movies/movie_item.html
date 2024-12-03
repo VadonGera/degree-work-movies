@@ -1,10 +1,26 @@
 <div class="col-md-4 mb-4">
-    <div class="card">
+    <div class="card h-100">
         <img src="{{ movie.get_image_url }}" class="card-img-top" alt="{{ movie.title }}">
         <div class="card-body">
-            <h5 class="card-title">{{ movie.title }}</h5>
-            <p class="card-text">{{ movie.description|truncatechars:100 }}</p>
-            <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary">Подробнее</a>
+            <h4 class="card-title">{{ movie.title }}</h4>
+
+            <!-- Год и страны -->
+            <h6 class="card-text text-muted mb-1 text-truncate">
+                {{ movie.year }} · {{ movie.countries.all|join:", " }}
+            </h6>
+
+            <!-- Жанры -->
+            <p class="card-text text-muted mb-1 text-truncate">
+                {{ movie.genres.all|join:", " }}
+            </p>
+
+            <!-- Актеры -->
+            <p class="card-text text-muted text-truncate">
+                <small>В ролях:</small> {{ movie.actors.all|join:", " }}
+            </p>
+
+            <p class="card-text">{{ movie.description|truncatechars:75 }}</p>
+            <a href="{% url 'movie_detail' movie.id %}" class="btn btn-dark">Подробнее</a>
         </div>
     </div>
 </div>
