@@ -20,7 +20,21 @@
             </p>
 
             <p class="card-text">{{ movie.description|truncatechars:75 }}</p>
-            <a href="{% url 'movie_detail' movie.id %}" class="btn btn-dark">Подробнее</a>
+<!--            <a href="{% url 'movie_detail' movie.id %}" class="btn btn-dark">Подробнее</a>-->
+            <!-- Рейтинг и кнопка -->
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'movie_detail' movie.id %}" class="btn btn-dark">Подробнее</a>
+
+                <div class="d-flex align-items-center">
+                    <!-- Количество рецензий -->
+                    <i class="bi bi-chat-square-text text-secondary me-1"></i>  <!-- Иконка чата -->
+                    <span class="me-3">{{ movie.review_count|default:"0" }}</span>
+                    <!-- Рейтинг -->
+                    <i class="bi bi-star-fill text-warning me-1"></i>  <!-- Иконка звезды -->
+                    <span>{{ movie.average_rating|default:"0.0" }}</span>  <!-- Средний рейтинг -->
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
