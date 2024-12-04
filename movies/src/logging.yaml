@@ -1,0 +1,62 @@
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  verbose:
+    format: "%(levelname)s %(asctime)s %(module)s %(message)s"
+
+  simple:
+    format: "%(levelname)s %(message)s"
+
+handlers:
+  console:
+    level: DEBUG
+    class: logging.StreamHandler
+    formatter: simple
+
+  app_file:
+    level: DEBUG
+    class: logging.handlers.TimedRotatingFileHandler
+    filename: logs/project.log
+    when: midnight
+    interval: 1
+    backupCount: 7
+    formatter: verbose
+
+#  auth_file:
+#    level: INFO
+#    class: logging.handlers.RotatingFileHandler
+#    filename: logs/auth.log
+#    maxBytes: 10485760  # 10 MB
+#    backupCount: 5
+#    formatter: verbose
+
+#  sentry:
+#    level: ERROR  # Отправлять только ошибки уровня ERROR и выше
+#    class: sentry_sdk.integrations.logging.EventHandler
+
+loggers:
+  django:
+    handlers: ["console", "app_file"]
+    level: DEBUG
+    propagate: True
+
+  django.db.backends:
+    handlers: ["console"]
+    level: DEBUG
+    propagate: False
+
+#  notes:
+#    handlers: ["sentry", "app_file", "console"]
+#    level: DEBUG  # Меняем на WARNING или ERROR в продакшене
+#    propagate: False
+
+#  users:
+#    handlers: ["sentry", "app_file", "console"]
+#    level: DEBUG  #  Меняем на WARNING или ERROR в продакшене
+#    propagate: False
+
+#  auth:
+#    handlers: ["auth_file"]
+#    level: INFO
+#    propagate: False

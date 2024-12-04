@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
-
+import yaml
+import logging.config
 
 load_dotenv()  # Загружаем базовые переменные из файла .env
 
@@ -37,6 +38,18 @@ SECRET_KEY = str(os.getenv("SECRET_KEY", "default_secret_key"))
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS", "127.0.0.1")).split(",")
+
+# ======= Логирование ===========================
+
+# Путь к файлу logging.yaml
+LOGGING_CONFIG_FILE = os.path.join(BASE_DIR, "logging.yaml")
+# Загрузка конфигурации логирования
+with open(LOGGING_CONFIG_FILE, "r") as file:
+    config = yaml.safe_load(file)
+    logging.config.dictConfig(config)
+
+# ===============================================
+
 
 # Application definition
 
