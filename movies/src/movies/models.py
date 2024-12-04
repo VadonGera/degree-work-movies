@@ -133,6 +133,10 @@ class Movie(models.Model):
     #     # return math.ceil(avg)
     #     return avg
 
+    def rating_count(self):
+        """Возвращает количество оценок для фильма"""
+        return self.ratings.count()
+
     def review_count(self):
         """Возвращает количество рецензий для фильма"""
         return self.reviews.count()
