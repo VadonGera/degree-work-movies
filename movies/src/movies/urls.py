@@ -12,4 +12,6 @@ urlpatterns = [
     path(
         "register/", views.CustomRegisterView.as_view(), name="register"
     ),  # Регистрация
+    path("movie/<int:pk>/rate/", views.rate_movie, name="rate_movie"),
+    path("movie/<int:pk>/review/", views.review_movie, name="review_movie"),
 ]

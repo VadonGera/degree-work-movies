@@ -1,0 +1,21 @@
+{% if user.is_authenticated %}
+<div>
+    <h5>Моя оценка</h5>
+    <form method="POST" action="{% url 'rate_movie' movie.id %}">
+        {% csrf_token %}
+        <select name="rating" class="form-select w-auto d-inline">
+            {% for i in rating_range %}
+                <option value="{{ i }}" {% if user_rating == i %}selected{% endif %}>{{ i }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Оценить</button>
+    </form>
+
+    <h5 class="mt-4">Написать рецензию</h5>
+    <form method="POST" action="{% url 'review_movie' movie.id %}">
+        {% csrf_token %}
+        <textarea name="review" class="form-control mb-2" rows="4" required>{{ user_review.content|default_if_none:'' }}</textarea>
+        <button type="submit" class="btn btn-primary">Опубликовать</button>
+    </form>
+</div>
+{% endif %}

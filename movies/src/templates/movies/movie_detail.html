@@ -1,15 +1,53 @@
-<div class="container">
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Основная информация о фильме -->
     <div class="row">
         <div class="col-md-4">
-            <img src="{{ movie.get_image_url }}" alt="{{ movie.title }}" class="img-fluid">
+            <img src="{{ movie.get_image_url }}" class="img-fluid rounded" alt="{{ movie.title }}">
         </div>
         <div class="col-md-8">
             <h2>{{ movie.title }}</h2>
+
+            <h6 class="card-text text-muted mb-1 text-truncate">
+                {{ movie.media_type.name }}
+            </h6>
+
             <p>{{ movie.description }}</p>
-            <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
-            <p><strong>Жанры:</strong> {{ movie.genres.all|join:", " }}</p>
-            <p><strong>Режиссеры:</strong> {{ movie.directors.all|join:", " }}</p>
-            <p><strong>Страны:</strong> {{ movie.countries.all|join:", " }}</p>
+            <ul class="list-unstyled">
+                <li><strong>Год производства:</strong> {{ movie.year }}</li>
+                <li><strong>Страны:</strong> {{ movie.countries.all|join:", " }}</li>
+                <li><strong>Жанры:</strong> {{ movie.genres.all|join:", " }}</li>
+                <li><strong>Режиссеры:</strong> {{ movie.directors.all|join:", " }}</li>
+                <li><strong>Актеры:</strong> {{ movie.actors.all|join:", " }}</li>
+                <li><strong>Тип:</strong> {{ movie.media_type.name }}</li>
+            </ul>
+            <div class="d-flex align-items-center mt-3">
+                <i class="bi bi-star-fill text-warning me-2"></i>
+                <span class="fs-5">{{ movie.average_rating|default:"0.0" }}</span>
+                <span class="text-muted ms-2">({{ movie.rating_count|default:"0.0" }})</span>
+            </div>
         </div>
     </div>
+
+    <!-- Блок "Моя оценка" и "Написать рецензию" -->
+    {% if user.is_authenticated %}
+    {% include "movies/user_interaction.html" %}
+    {% endif %}
+
+    <!-- Список рецензий -->
+    <div class="mt-4">
+        <h5>Рецензии зрителей</h5>
+        {% for review in reviews %}
+        <div class="border rounded p-3 mb-3">
+            <h6>{{ review.user.username }}</h6>
+            <p class="text-muted small">{{ review.updated_at|date:"d M Y в H:i" }}</p>
+            <p>{{ review.content }}</p>
+        </div>
+        {% empty %}
+        <p class="text-muted">Рецензий пока нет. Будьте первым, кто напишет рецензию!</p>
+        {% endfor %}
+    </div>
 </div>
+{% endblock %}

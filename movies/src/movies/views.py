@@ -1,13 +1,17 @@
 from django.db.models import Avg, Max
 from django.db.models.functions import Round
 from django.shortcuts import render
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Movie, MediaType, Country, Genre
+from .models import Movie, MediaType, Country, Genre, Rating, Review
 
 
 class MovieListView(ListView):
@@ -69,6 +73,35 @@ class MovieDetailView(DetailView):
     template_name = "movies/movie_detail.html"
     context_object_name = "movie"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Диапазон оценок от 1 до 10
+        context["rating_range"] = range(1, 11)
+
+        # Текущая оценка пользователя (если он авторизован)
+        if self.request.user.is_authenticated:
+            user_rating = Rating.objects.filter(
+                movie=self.object, user=self.request.user
+            ).first()
+            context["user_rating"] = user_rating.value if user_rating else None
+
+            # Текущая рецензия пользователя (если есть)
+            user_review = Review.objects.filter(
+                movie=self.object, user=self.request.user
+            ).first()
+            context["user_review"] = user_review
+        else:
+            context["user_rating"] = None
+            context["user_review"] = None
+
+        # Список рецензий
+        context["reviews"] = Review.objects.filter(movie=self.object).order_by(
+            "-updated_at"
+        )
+
+        return context
+
 
 class CustomLoginView(LoginView):
     template_name = "movies/login.html"
@@ -88,3 +121,58 @@ class CustomRegisterView(CreateView):
 
         login(self.request, user)
         return super().form_valid(form)
+
+
+# def movie_detail(request, movie_id):
+#     # Пример данных
+#     movie = Movie.objects.get(pk=movie_id)
+#     user_rating = 7  # Пример: оценка пользователя
+#     user_review = None  # Пример: рецензия пользователя
+#
+#     context = {
+#         "movie": movie,
+#         "user_rating": user_rating,
+#         "user_review": user_review,
+#         "rating_range": range(1, 11),  # Диапазон оценок
+#     }
+#     return render(request, "movies/movie_detail.html", context)
+
+
+@login_required
+def rate_movie(request, pk):
+    # Получаем фильм
+    movie = get_object_or_404(Movie, pk=pk)
+
+    if request.method == "POST":
+        rating_value = request.POST.get("rating")
+        if rating_value and rating_value.isdigit():
+            rating_value = int(rating_value)
+            if 1 <= rating_value <= 10:  # Проверяем, что оценка в диапазоне 1-10
+                # Ищем существующий рейтинг для пользователя
+                rating, created = Rating.objects.get_or_create(
+                    movie=movie, user=request.user, defaults={"value": rating_value}
+                )
+                if not created:
+                    rating.value = rating_value  # Обновляем оценку
+                    rating.save()
+
+    return redirect("movie_detail", pk=movie.pk)
+
+
+@login_required
+def review_movie(request, pk):
+    # Получаем фильм
+    movie = get_object_or_404(Movie, pk=pk)
+
+    if request.method == "POST":
+        review_content = request.POST.get("review")
+        if review_content:
+            # Ищем существующую рецензию для пользователя
+            review, created = Review.objects.get_or_create(
+                movie=movie, user=request.user, defaults={"content": review_content}
+            )
+            if not created:
+                review.content = review_content  # Обновляем рецензию
+                review.save()
+
+    return redirect("movie_detail", pk=movie.pk)
