@@ -1,3 +1,5 @@
+import logging
+
 from django.db.models import Avg, Max
 from django.db.models.functions import Round
 from django.shortcuts import render
@@ -12,6 +14,9 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Movie, MediaType, Country, Genre, Rating, Review
+
+# Настраиваем логгер для приложения "movies"
+logger = logging.getLogger("movies")
 
 
 class MovieListView(ListView):
@@ -155,6 +160,11 @@ def rate_movie(request, pk):
                 if not created:
                     rating.value = rating_value  # Обновляем оценку
                     rating.save()
+                    logger.info(
+                        "Пользователь с id %s успешно изменил рейтинг к фильму с id %s",
+                        request.user.id,
+                        movie.pk,
+                    )
 
     return redirect("movie_detail", pk=movie.pk)
 
@@ -174,5 +184,10 @@ def review_movie(request, pk):
             if not created:
                 review.content = review_content  # Обновляем рецензию
                 review.save()
+                logger.info(
+                    "Пользователь с id %s успешно опубликовал рецензию на фильм с id %s",
+                    request.user.id,
+                    movie.pk,
+                )
 
     return redirect("movie_detail", pk=movie.pk)

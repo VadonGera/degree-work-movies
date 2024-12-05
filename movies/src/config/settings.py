@@ -41,12 +41,18 @@ ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS", "127.0.0.1")).split(",")
 
 # ======= Логирование ===========================
 
+# Отключаем автонастройку логирования
+LOGGING_CONFIG = None
 # Путь к файлу logging.yaml
 LOGGING_CONFIG_FILE = os.path.join(BASE_DIR, "logging.yaml")
 # Загрузка конфигурации логирования
-with open(LOGGING_CONFIG_FILE, "r") as file:
-    config = yaml.safe_load(file)
-    logging.config.dictConfig(config)
+try:
+    with open(LOGGING_CONFIG_FILE, "r") as file:
+        config = yaml.safe_load(file)
+        logging.config.dictConfig(config)
+        print("Конфигурация логирования успешно загружена.")
+except Exception as e:
+    print(f"Ошибка загрузки конфигурации логирования: {e}")
 
 # ===============================================
 
