@@ -14,8 +14,12 @@
     <h5 class="mt-4">Написать рецензию</h5>
     <form method="POST" action="{% url 'review_movie' movie.id %}">
         {% csrf_token %}
-        <textarea name="review" class="form-control mb-2" rows="4" required>{{ user_review.content|default_if_none:'' }}</textarea>
-        <button type="submit" class="btn btn-primary">Опубликовать</button>
+        <div class="form-floating">
+          <textarea name="review" class="form-control mb-3" placeholder="Leave a review here" id="floatingTextarea2" style="height: 100px" required>{{ user_review.content|default_if_none:'' }}</textarea>
+          <label for="floatingTextarea2">Моя рецензия</label>
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">Опубликовать</button>
     </form>
 </div>
 {% endif %}

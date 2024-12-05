@@ -5,20 +5,22 @@
 }
 
 .img-container {
+    width: 100%;
+    height: 0;
+    padding-top: 150%; /* Соотношение сторон: 3:2 */
     position: relative;
-    width: 100%; /* Ширина равна ширине карточки */
-    padding-top: 56.25%; /* Соотношение сторон 16:9 */
-    overflow: hidden; /* Скрываем содержимое, выходящее за рамки контейнера */
+    overflow: hidden;
     border-radius: 8px; /* Скругление углов */
-    background-color: #f0f0f0; /* Фон для пустых изображений */
-    display: flex;
-    align-items: center; /* Центрируем изображение по вертикали */
-    justify-content: center; /* Центрируем изображение по горизонтали */
+    background-color: #f0f0f0; /* Цвет фона */
 }
 
 .img-container img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Масштабируем изображение, чтобы оно помещалось в контейнер */
-    object-position: center; /* Центрируем изображение */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Масштабируем изображение, чтобы оно полностью помещалось в контейнер */
+    object-position: center;
+    background-color: #fff; /* Фон для пустых областей, если изображение не заполняет контейнер */
 }
