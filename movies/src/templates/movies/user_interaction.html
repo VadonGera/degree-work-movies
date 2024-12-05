@@ -1,14 +1,14 @@
 {% if user.is_authenticated %}
 <div>
-    <h5>Моя оценка</h5>
-    <form method="POST" action="{% url 'rate_movie' movie.id %}">
+
+    <form method="POST" action="{% url 'rate_movie' movie.id %}" id="ratingForm">
         {% csrf_token %}
-        <select name="rating" class="form-select w-auto d-inline">
+        <label for="ratingSelect" class="form-label me-2">Моя оценка</label>
+        <select name="rating" id="ratingSelect" class="form-select w-auto d-inline">
             {% for i in rating_range %}
                 <option value="{{ i }}" {% if user_rating == i %}selected{% endif %}>{{ i }}</option>
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary">Оценить</button>
     </form>
 
     <h5 class="mt-4">Написать рецензию</h5>
@@ -22,4 +22,11 @@
         <button type="submit" class="btn btn-outline-dark">Опубликовать</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('ratingSelect').addEventListener('change', function () {
+        document.getElementById('ratingForm').submit();
+    });
+</script>
+
 {% endif %}
