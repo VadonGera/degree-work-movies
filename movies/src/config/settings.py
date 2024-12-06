@@ -18,10 +18,10 @@ import logging.config
 
 load_dotenv()  # Загружаем базовые переменные из файла .env
 
-# Определяем текущую среду, по умолчанию 'development'
-current_env = str(os.getenv("DJANGO_ENV", "development"))
-env_file = f".env.{current_env}"  # Определяем путь к нужному .env файлу
-load_dotenv(env_file)  # Дозагружаем переменные из файла
+# # Определяем текущую среду, по умолчанию 'development'
+# current_env = str(os.getenv("DJANGO_ENV", "development"))
+# env_file = f".env.{current_env}"  # Определяем путь к нужному .env файлу
+# load_dotenv(env_file)  # Дозагружаем переменные из файла
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
