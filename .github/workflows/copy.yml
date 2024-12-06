@@ -1,4 +1,4 @@
-name: Copy to Server
+name: Copy & Deploy to Server
 
 on:
   workflow_dispatch: # Ручной запуск через интерфейс GitHub Actions
@@ -35,6 +35,10 @@ jobs:
           ./ \
           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/
 
-#    - name: Copy files to server
-#      run: |
-#        scp -r ./ horse@5.35.124.148:/home/horse/movies-x-point
+    - name: Deploy Docker Compose
+      run: |
+        ssh -o StrictHostKeyChecking=no {{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /home/${{ secrets.SERVER_USER }}/movies-x-point/
+          docker-compose -f docker-compose.yml down --rmi local
+          docker-compose -f docker-compose.yml up --build -d
+        EOF
