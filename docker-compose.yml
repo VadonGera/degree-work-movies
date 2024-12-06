@@ -36,7 +36,7 @@ services:
     env_file:
       - .env
     environment:
-      DJANGO_ENV: ${DJANGO_BOX}  #development  # (development / production)
+      # DJANGO_ENV: ${DJANGO_BOX}  #development  # (development / production)
       MODE: ${MODE_BOX}  #  (django / gunicorn)
       PORT: ${PORT_BOX}
 

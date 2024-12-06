@@ -15,14 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-#    - name: Setup SSH key
-#      env:
-#        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-#      run: |
-#        mkdir -p ~/.ssh
-#        echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
-#        chmod 600 ~/.ssh/id_rsa
-
     - name: Set up SSH
       run: |
         mkdir -p ~/.ssh
@@ -37,8 +29,8 @@ jobs:
           --exclude='.env' \
           --exclude='.env.example' \
           --exclude='.gitignore' \
-          --exclude='docker-compose.db.yml' \
           --exclude='.github/' \
+          --exclude='movies/src/media/' \
           --exclude='data/' \
           ./ \
           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/

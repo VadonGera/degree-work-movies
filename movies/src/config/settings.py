@@ -39,7 +39,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = str(os.getenv("ALLOWED_HOSTS", "127.0.0.1")).split(",")
 
-# ======= Логирование ===========================
+# ============= Logging  ========================
 
 # Отключаем автонастройку логирования
 LOGGING_CONFIG = None
@@ -56,6 +56,19 @@ except Exception as e:
 
 # ===============================================
 
+# =============== HTTPS =========================
+
+# Настройки для HTTPS
+SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "False").lower() == "true"
+SESSION_COOKIE_SECURE = (
+    os.getenv("DJANGO_SESSION_COOKIE_SECURE", "False").lower() == "true"
+)
+CSRF_COOKIE_SECURE = os.getenv("DJANGO_CSRF_COOKIE_SECURE", "False").lower() == "true"
+# Настройка заголовка для обратного прокси
+proxy_header = os.getenv("DJANGO_SECURE_PROXY_SSL_HEADER", None)
+SECURE_PROXY_SSL_HEADER = tuple(proxy_header.split(",")) if proxy_header else None
+
+# ================================================
 
 # Application definition
 
