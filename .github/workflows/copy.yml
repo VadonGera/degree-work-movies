@@ -30,19 +30,19 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-#    - name: Copy repository to server
-#      run: |
-#        rsync -avz --delete \
-#          --exclude='.git' \
-#          --exclude='.env' \
-#          --exclude='.env.example' \
-#          --exclude='.gitignore' \
-#          --exclude='docker-compose.db.yml' \
-#          --exclude='.github/' \
-#          --exclude='data/' \
-#          ./ \
-#          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/
-
-    - name: Copy files to server
+    - name: Copy repository to server
       run: |
-        scp -r ./ horse@5.35.124.148:/home/horse/movies-x-point
+        rsync -avz --delete \
+          --exclude='.git' \
+          --exclude='.env' \
+          --exclude='.env.example' \
+          --exclude='.gitignore' \
+          --exclude='docker-compose.db.yml' \
+          --exclude='.github/' \
+          --exclude='data/' \
+          ./ \
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/
+
+#    - name: Copy files to server
+#      run: |
+#        scp -r ./ horse@5.35.124.148:/home/horse/movies-x-point
