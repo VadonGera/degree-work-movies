@@ -2,6 +2,26 @@ name: movies-container
 # Если MODE: django - "manage.py runserver 0.0.0.0:8000"
 # Если MODE: gunicorn - gunicorn на порту PORT (! ports: "PORT:PORT")
 services:
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    container_name: movies-nginx
+    volumes:
+#      - static_volume:/staticfiles  # Подключаем volume со статикой
+      - static_data:/usr/share/nginx/html/static
+      - ./movies/src/media:/usr/share/nginx/html/media  # Монтируем media напрямую
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80" # порт открыт для внешнего мира.
+      - "443:443"
+    links:
+      - web
+    depends_on:
+      - web
+    networks:
+      - horse
+
   web:
     build:
       context: ./movies
@@ -9,9 +29,10 @@ services:
     image: movies-image:2024.point
     volumes:
       - ./movies/src:/app
-      - static_volume:/app/staticfiles  # Добавляем volume для общей статики
-    ports:
-      - ${PORT_BOX}:${PORT_BOX}
+      - static_data:/app/staticfiles  # Добавляем volume для общей статики
+#      - media_data:/app/media
+#    ports:
+#      - ${PORT_BOX}:${PORT_BOX}
     env_file:
       - .env
     environment:
@@ -54,7 +75,8 @@ services:
 
 volumes:
   my_data:  # Объявляем том my_data для хранения данных PostgreSQL
-  static_volume:  # Определяем общий volume статики
+  static_data:  # Определяем общий volume статики
+#  media_data:
 
 networks:
   horse:
