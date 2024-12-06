@@ -37,7 +37,8 @@ jobs:
 
     - name: Deploy Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no {{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#        ssh -o StrictHostKeyChecking=no {{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd /home/${{ secrets.SERVER_USER }}/movies-x-point/
           docker-compose -f docker-compose.yml down --rmi local
           docker-compose -f docker-compose.yml up --build -d
