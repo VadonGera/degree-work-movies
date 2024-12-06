@@ -23,16 +23,19 @@ jobs:
         echo "$DEPLOY_KEY" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
 
-    - name: Copy repository to server
-      run: |
-        rsync -avz --delete \
-          --exclude='.git' \
-          --exclude='.env' \
-          --exclude='.env.example' \
-          --exclude='.gitignore' \
-          --exclude='docker-compose.db.yml' \
-          --exclude='.github/' \
-          --exclude='data/' \
-          ./ \
-          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/
+#    - name: Copy repository to server
+#      run: |
+#        rsync -avz --delete \
+#          --exclude='.git' \
+#          --exclude='.env' \
+#          --exclude='.env.example' \
+#          --exclude='.gitignore' \
+#          --exclude='docker-compose.db.yml' \
+#          --exclude='.github/' \
+#          --exclude='data/' \
+#          ./ \
+#          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/
 
+    - name: Copy files to server
+      run: |
+        scp -r ./ horse@5.35.124.148:/home/horse/movies-x-point
