@@ -20,8 +20,8 @@ jobs:
         DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
       run: |
         mkdir -p ~/.ssh
-        echo "$DEPLOY_KEY" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
+        echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
 #    - name: Copy repository to server
 #      run: |
