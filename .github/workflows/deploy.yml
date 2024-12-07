@@ -35,6 +35,7 @@ jobs:
           --exclude='movies/src/media/' \
           --exclude='data/' \
           --exclude='nginx.conf' \
+          --exclude='nginx.pro.conf' \
           ./ \
           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/${{ secrets.SERVER_USER }}/movies-x-point/
 
