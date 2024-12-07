@@ -4,13 +4,6 @@ name: Run Tests
 on:
   workflow_call: # Этот триггер позволяет вызывать workflow из другого workflow
     inputs: { } # Пустой объект, если не передаются параметры
-#  # Запускает рабочий процесс по событиям push или pull request, но только для "main" ветви
-#  push:
-#    branches:
-#      - main
-#  pull_request:
-#    branches:
-#      - main
 
   workflow_dispatch:  # Ручной запуск через интерфейс GitHub Actions
 

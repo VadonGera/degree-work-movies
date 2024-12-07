@@ -1,11 +1,11 @@
-name: Copy & Deploy to Server
+name: Tests & Copy & Deploy to Server
 
 on:
   workflow_dispatch: # Ручной запуск через интерфейс GitHub Actions
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -14,6 +14,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Run tests
+      uses: ./.github/workflows/tests.yml
 
     - name: Set up SSH
       run: |
