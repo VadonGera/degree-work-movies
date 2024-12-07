@@ -11,4 +11,4 @@ accesslog = "-"  # Логи запросов в консоль
 errorlog = "-"  # Логи ошибок в консоль
 timeout = 60
 
-print(f"GURICORN_LOG_LEVEL: {str(os.getenv("GURICORN_LOG_LEVEL"))}")
+# print(f"GURICORN_LOG_LEVEL: {str(os.getenv("GURICORN_LOG_LEVEL"))}")

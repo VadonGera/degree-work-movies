@@ -11,7 +11,7 @@ services:
 #      - static_volume:/staticfiles  # Подключаем volume со статикой
       - static_data:/usr/share/nginx/html/static
       - ./movies/src/media:/usr/share/nginx/html/media  # Монтируем media напрямую
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.pro.conf:/etc/nginx/nginx.conf    # <--here nginx
       - ./data/certbot/conf:/etc/letsencrypt    # <--here certbot
       - ./data/certbot/www:/var/www/certbot     # <--here certbot
     ports:
