@@ -72,7 +72,7 @@ jobs:
     # 6. Запускаем тесты
     - name: Run tests
       env:
-        PGSQL_ENGINE: ${{ env.SQL_DATABASE }}
+        PGSQL_ENGINE: ${{ env.SQL_ENGINE }}
         PGSQL_DATABASE: ${{ env.SQL_DATABASE }}
         PGSQL_USER: ${{ env.SQL_USER }}
         PGSQL_PASSWORD: ${{ env.SQL_PASSWORD }}
