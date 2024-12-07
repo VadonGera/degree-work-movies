@@ -3,9 +3,9 @@ name: Run Tests
 # Триггеры для запуска workflow
 on:
   workflow_call: # Этот триггер позволяет вызывать workflow из другого workflow
-    inputs: { } # Пустой объект, если не передаются параметры
+  #  inputs: { } # Пустой объект, если не передаются параметры
 
-  workflow_dispatch:  # Ручной запуск через интерфейс GitHub Actions
+  # workflow_dispatch:  # Ручной запуск через интерфейс GitHub Actions
 
 jobs:
   test:

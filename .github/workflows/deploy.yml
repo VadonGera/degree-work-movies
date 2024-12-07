@@ -3,20 +3,23 @@ name: Tests & Copy & Deploy to Server
 on:
   workflow_dispatch: # Ручной запуск через интерфейс GitHub Actions
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Run reusable workflow for tests
+      uses: ./.github/workflows/tests.yml
+
+
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Run tests
-      uses: ./.github/workflows/tests.yml
+
 
     - name: Set up SSH
       run: |
