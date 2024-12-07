@@ -62,20 +62,22 @@ jobs:
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
         echo "DEBUG=True" >> $GITHUB_ENV  # Для тестового окружения
         echo "ALLOWED_HOSTS=127.0.0.1" >> $GITHUB_ENV
-        echo "PGSQL_DATABASE=test_db" >> $GITHUB_ENV
-        echo "PGSQL_USER=test_user" >> $GITHUB_ENV
-        echo "PGSQL_PASSWORD=test_password" >> $GITHUB_ENV
-        echo "PGSQL_HOST=127.0.0.1" >> $GITHUB_ENV  # Используйте 'localhost', если база данных работает в контейнере на том же хосте
+        echo "SQL_ENGINE=django.db.backends.postgresql_psycopg2" >> $GITHUB_ENV
+        echo "SQL_DATABASE=test_db" >> $GITHUB_ENV
+        echo "SQL_USER=test_user" >> $GITHUB_ENV
+        echo "SQL_PASSWORD=test_password" >> $GITHUB_ENV
+        echo "SQL_HOST=127.0.0.1" >> $GITHUB_ENV  # Используйте 'localhost', если база данных работает в контейнере на том же хосте
         
 
     # 6. Запускаем тесты
     - name: Run tests
       env:
-        SQL_DATABASE: ${{ env.SQL_DATABASE }}
-        SQL_USER: ${{ env.SQL_USER }}
-        SQL_PASSWORD: ${{ env.SQL_PASSWORD }}
-        # SQL_HOST: ${{ env.SQL_HOST }}
-        SQL_PORT: ${{ env.SQL_PORT }}
+        PGSQL_ENGINE: ${{ env.SQL_DATABASE }}
+        PGSQL_DATABASE: ${{ env.SQL_DATABASE }}
+        PGSQL_USER: ${{ env.SQL_USER }}
+        PGSQL_PASSWORD: ${{ env.SQL_PASSWORD }}
+        # PGSQL_HOST: ${{ env.SQL_HOST }}
+        PGSQL_PORT: ${{ env.SQL_PORT }}
         ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
         SECRET_KEY: ${{ env.SECRET_KEY }}
         DEBUG: ${{ env.DEBUG }}
