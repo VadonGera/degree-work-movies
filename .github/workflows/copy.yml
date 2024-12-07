@@ -2,10 +2,10 @@ name: Copy & Deploy to Server
 
 on:
   workflow_dispatch: # Ручной запуск через интерфейс GitHub Actions
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
 
 jobs:
   deploy:

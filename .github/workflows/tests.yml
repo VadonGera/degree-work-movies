@@ -1,0 +1,85 @@
+name: Run Tests
+
+# Триггеры для запуска workflow
+on:
+  workflow_call: # Этот триггер позволяет вызывать workflow из другого workflow
+    inputs: { } # Пустой объект, если не передаются параметры
+#  # Запускает рабочий процесс по событиям push или pull request, но только для "main" ветви
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    branches:
+#      - main
+
+  workflow_dispatch:  # Ручной запуск через интерфейс GitHub Actions
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Используем виртуальную машину с Ubuntu
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-  
+          --health-cmd "pg_isready -U test_user"  
+          --health-interval 10s  
+          --health-timeout 5s  
+          --health-retries 5  
+
+    steps:
+    # 1. Клонируем репозиторий с кодом
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Устанавливаем Python 3.12
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12  # Указываем необходимую версию Python
+
+    # 3. Устанавливаем зависимости проекта
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip  # Обновляем pip
+        pip install -r src/requirements.txt  # Устанавливаем зависимости из requirements.txt
+
+    # 4. Устанавливаем дополнительные зависимости для тестов (если есть)
+    - name: Install test dependencies
+      run: |
+        pip install pytest pytest-django  # Установка pytest, если используется
+        # Добавьте другие пакеты, если нужно
+
+    # 5. Устанавливаем переменную окружения для базы данных
+    - name: Set database environment variable
+      run: |
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+        echo "DEBUG=True" >> $GITHUB_ENV  # Для тестового окружения
+        echo "ALLOWED_HOSTS=127.0.0.1" >> $GITHUB_ENV
+        echo "PGSQL_DATABASE=test_db" >> $GITHUB_ENV
+        echo "PGSQL_USER=test_user" >> $GITHUB_ENV
+        echo "PGSQL_PASSWORD=test_password" >> $GITHUB_ENV
+        echo "PGSQL_HOST=127.0.0.1" >> $GITHUB_ENV  # Используйте 'localhost', если база данных работает в контейнере на том же хосте
+        
+
+    # 6. Запускаем тесты
+    - name: Run tests
+      env:
+        SQL_DATABASE: ${{ env.SQL_DATABASE }}
+        SQL_USER: ${{ env.SQL_USER }}
+        SQL_PASSWORD: ${{ env.SQL_PASSWORD }}
+        # SQL_HOST: ${{ env.SQL_HOST }}
+        SQL_PORT: ${{ env.SQL_PORT }}
+        ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+        SECRET_KEY: ${{ env.SECRET_KEY }}
+        DEBUG: ${{ env.DEBUG }}
+      run: |
+        cd src
+        pytest --cov=movies --cov-report=term-missing
+
