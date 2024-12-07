@@ -80,6 +80,6 @@ jobs:
         SECRET_KEY: ${{ env.SECRET_KEY }}
         DEBUG: ${{ env.DEBUG }}
       run: |
-        cd src
+        cd movies/src
         pytest --cov=movies --cov-report=term-missing
 
