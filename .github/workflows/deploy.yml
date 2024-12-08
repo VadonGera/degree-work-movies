@@ -34,6 +34,8 @@ jobs:
           --exclude='.github/' \
           --exclude='movies/src/media/' \
           --exclude='data/' \
+          --exclude='images/' \
+          --exclude='README.md' \
           --exclude='nginx.conf' \
           --exclude='nginx.pro.conf' \
           ./ \
